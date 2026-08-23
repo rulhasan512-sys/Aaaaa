@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">RAKIB AI</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="subtitle">Experience the most powerful free AI for text, voice, files, and images.</string>
+    <string name="input_placeholder">What do you want to build, upload, or ask?</string>
+    <string name="send">Send</string>
+    <string name="new_chat">New Chat</string>
+    <string name="clear_history">Clear History</string>
+    <string name="confirm_clear">Are you sure you want to clear all chat history?</string>
+    <string name="confirm_delete_session">Are you sure you want to delete this chat session?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="model_gemini_flash">Gemini 3.5 Flash</string>
+    <string name="model_gemini_lite">Gemini 3.1 Lite</string>
+    <string name="model_gemini_voice">Gemini Voice AI</string>
+    <string name="model_picture_ai">Picture AI</string>
+    <string name="attach_photo">Photo / Camera</string>
+    <string name="attach_gallery">Gallery Image</string>
+    <string name="attach_file">Document / File</string>
+    <string name="attach_video">Video File</string>
+    <string name="voice_speak_title">Voice Reading</string>
+    <string name="voice_listening">Listening… Speak now</string>
+</resources>

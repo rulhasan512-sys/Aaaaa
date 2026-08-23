@@ -1,0 +1,6 @@
+{
+  "name": "RAKIB AI",
+  "description": "Powerful AI Assistant with voice reading, multimodal photo, video, and file analysis, image generator, and local chat history",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
