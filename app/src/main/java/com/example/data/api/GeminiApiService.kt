@@ -64,12 +64,18 @@ object GeminiApiClient {
     suspend fun executeGenerateContent(
         modelName: String,
         history: List<GeminiContent>,
-        systemInstruction: String = "You are RAKIB AI, the most advanced, powerful, and helpful AI assistant. You must always provide 100% correct, factual, and highly accurate answers to everything the user asks. If the user attaches images, documents, or videos, analyze them with deep insight. Format your responses with beautiful Markdown styling."
+        systemInstruction: String = "You are RAKIB AI, the most advanced, powerful, and helpful AI assistant. You must always provide 100% correct, factual, and highly accurate answers to everything the user asks. If the user attaches images, documents, or videos, analyze them with deep insight. Format your responses with beautiful Markdown styling.",
+        customApiKey: String? = null
     ): Result<String> = withContext(Dispatchers.IO) {
-        val apiKey = BuildConfig.GEMINI_API_KEY
-        if (apiKey.isBlank() || apiKey == "MY_GEMINI_API_KEY") {
+        val apiKey = when {
+            !customApiKey.isNullOrBlank() -> customApiKey.trim()
+            BuildConfig.GEMINI_API_KEY.isNotBlank() && BuildConfig.GEMINI_API_KEY != "MY_GEMINI_API_KEY" -> BuildConfig.GEMINI_API_KEY
+            else -> ""
+        }
+
+        if (apiKey.isBlank()) {
             return@withContext Result.failure(
-                Exception("Gemini API key is not configured. Please set your GEMINI_API_KEY in the Secrets panel.")
+                Exception("Gemini API key is not configured. Tap the 🔑 Key button in the top bar to enter your free Gemini API key.")
             )
         }
 

@@ -82,6 +82,20 @@ jobs:
 
           echo "Temporary debug keystore confirmed."
 
+      - name: Configure API key in .env
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "=== Configuring .env for Secrets Plugin ==="
+          touch .env
+          if [ -n "$GEMINI_API_KEY" ]; then
+            echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env
+            echo "Successfully configured GEMINI_API_KEY in .env"
+          else
+            echo "GEMINI_API_KEY=" > .env
+            echo "Notice: GEMINI_API_KEY secret not found in repository secrets. Users can also enter their API key directly inside the app."
+          fi
+
       - name: Build debug APK
         run: |
           gradle :app:assembleDebug --stacktrace --no-daemon

@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.AiModel
 import com.example.data.model.AttachmentType
+import com.example.ui.components.ApiKeySettingsBottomSheet
 import com.example.ui.components.AspectRatioBottomSheet
 import com.example.ui.components.AttachmentBottomSheet
 import com.example.ui.components.ChatMessageBubble
@@ -101,12 +102,14 @@ fun ChatScreen(
     val errorToast by viewModel.errorToast.collectAsState()
     val fullScreenImage by viewModel.fullScreenImage.collectAsState()
     val speakingMessageId by viewModel.speakingMessageId.collectAsState()
+    val userApiKey by viewModel.userApiKey.collectAsState()
 
     // Sheet states
     var showModelSelector by remember { mutableStateOf(false) }
     var showAspectRatioSelector by remember { mutableStateOf(false) }
     var showAttachmentPicker by remember { mutableStateOf(false) }
     var showVoiceSettings by remember { mutableStateOf(false) }
+    var showApiKeySettings by remember { mutableStateOf(false) }
 
     // Scroll to bottom when messages update
     LaunchedEffect(messages.size, isGenerating) {
@@ -201,7 +204,9 @@ fun ChatScreen(
                     onOpenDrawer = { scope.launch { drawerState.open() } },
                     onNewChat = { viewModel.startNewChat() },
                     onOpenVoiceSettings = { showVoiceSettings = true },
-                    autoVoiceRead = autoVoiceRead
+                    onOpenApiKeySettings = { showApiKeySettings = true },
+                    autoVoiceRead = autoVoiceRead,
+                    hasCustomApiKey = userApiKey.isNotBlank()
                 )
             },
             bottomBar = {
@@ -316,6 +321,15 @@ fun ChatScreen(
             onSetVoiceRate = { viewModel.setVoiceRate(it) },
             onSetVoicePitch = { viewModel.setVoicePitch(it) },
             onDismiss = { showVoiceSettings = false }
+        )
+    }
+
+    if (showApiKeySettings) {
+        ApiKeySettingsBottomSheet(
+            currentApiKey = userApiKey,
+            onSaveApiKey = { viewModel.saveUserApiKey(it) },
+            onClearApiKey = { viewModel.clearUserApiKey() },
+            onDismiss = { showApiKeySettings = false }
         )
     }
 

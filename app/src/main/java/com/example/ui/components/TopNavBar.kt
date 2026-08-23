@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material.icons.filled.Settings
@@ -52,7 +53,9 @@ fun TopNavBar(
     onOpenDrawer: () -> Unit,
     onNewChat: () -> Unit,
     onOpenVoiceSettings: () -> Unit,
+    onOpenApiKeySettings: () -> Unit,
     autoVoiceRead: Boolean,
+    hasCustomApiKey: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -109,11 +112,33 @@ fun TopNavBar(
             }
         }
 
-        // Right Actions: Voice Settings & New Chat
+        // Right Actions: API Key Settings, Voice Settings & New Chat
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
+            // API Key Button
+            IconButton(
+                onClick = onOpenApiKeySettings,
+                modifier = Modifier
+                    .size(38.dp)
+                    .clip(CircleShape)
+                    .background(if (hasCustomApiKey) CrimsonSubtle else SurfaceCard)
+                    .border(
+                        1.dp,
+                        if (hasCustomApiKey) CrimsonLight.copy(alpha = 0.5f) else BorderDark,
+                        CircleShape
+                    )
+                    .testTag("api_key_settings_button")
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Key,
+                    contentDescription = "API Key Settings",
+                    tint = if (hasCustomApiKey) CrimsonLight else TextSecondary,
+                    modifier = Modifier.size(17.dp)
+                )
+            }
+
             // Voice Settings Button
             IconButton(
                 onClick = onOpenVoiceSettings,

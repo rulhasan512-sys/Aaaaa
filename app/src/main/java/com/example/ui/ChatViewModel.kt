@@ -65,6 +65,10 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private val _fullScreenImage = MutableStateFlow<String?>(null)
     val fullScreenImage: StateFlow<String?> = _fullScreenImage.asStateFlow()
 
+    private val sharedPrefs = application.getSharedPreferences("rakib_ai_prefs", Context.MODE_PRIVATE)
+    private val _userApiKey = MutableStateFlow<String>(sharedPrefs.getString("custom_gemini_api_key", "") ?: "")
+    val userApiKey: StateFlow<String> = _userApiKey.asStateFlow()
+
     val speakingMessageId: StateFlow<String?> = ttsManager.speakingMessageId
 
     // All chat sessions from Room DB
@@ -133,6 +137,17 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setVoicePitch(pitch: Float) {
         ttsManager.setSpeechPitch(pitch)
+    }
+
+    fun saveUserApiKey(key: String) {
+        val trimmed = key.trim()
+        sharedPrefs.edit().putString("custom_gemini_api_key", trimmed).apply()
+        _userApiKey.value = trimmed
+    }
+
+    fun clearUserApiKey() {
+        sharedPrefs.edit().remove("custom_gemini_api_key").apply()
+        _userApiKey.value = ""
     }
 
     fun showFullScreenImage(url: String?) {
@@ -385,7 +400,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         val targetModel = if (model == AiModel.GEMINI_VOICE) "gemini-3.5-flash" else model.id
         val result = GeminiApiClient.executeGenerateContent(
             modelName = targetModel,
-            history = historyContents
+            history = historyContents,
+            customApiKey = _userApiKey.value
         )
 
         val aiMsgId = UUID.randomUUID().toString()
